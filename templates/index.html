@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Nutrição Saudável</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Lato, sans-serif;
+            background: url('/static/fundo4.jpeg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+header {
+    background-color: white;
+    color: #266924;
+    padding: 50px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+header img.logo {
+    position: absolute;
+    left: 60px;
+    height: 20px;
+}
+
+h1{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 64px; /* ou qualquer outro valor como 72px, 80px etc. */
+}
+
+
+        main {
+            background: white;
+            padding: 30px;
+            margin-top: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        form p {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        label {
+            display: inline-block;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #266924;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #81de62;
+        }
+
+        h3 {
+            margin-top: 30px;
+        }
+
+        #resposta {
+            font-size: 18px;
+            color: #333;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="/static/NutriLogo.png" class="logo" alt=" " style="height: 170px;">
+        <h1>Diagnóstico de Saúde</h1>
+    </header>
+
+    <main>
+        <h2> 🥝 Responda às perguntas abaixo e descubra se você tem uma saúde exemplar:</h2>
+        <form id="formDiagnostico">
+            <p>Você consome fast-food mais de uma vez na semana?</p>
+            <label><input type="radio" name="fastfood" value="s" required> Sim</label>
+            <label><input type="radio" name="fastfood" value="n"> Não</label>
+
+            <p>Você consome verduras e legumes?</p>
+            <label><input type="radio" name="verduraselegumes" value="s" required> Sim</label>
+            <label><input type="radio" name="verduraselegumes" value="n"> Não</label>
+
+            <p>Você bebe no mínimo 2L de água por dia?</p>
+            <label><input type="radio" name="agua" value="s" required> Sim</label>
+            <label><input type="radio" name="agua" value="n"> Não</label>
+
+            <p>Você pratica atividades físicas com frequência?</p>
+            <label><input type="radio" name="exercícios" value="s" required> Sim</label>
+            <label><input type="radio" name="exercícios" value="n"> Não</label>
+
+            <p>Você faz acompanhamento nutricional?</p>
+            <label><input type="radio" name="nutri" value="s" required> Sim</label>
+            <label><input type="radio" name="nutri" value="n"> Não</label>
+
+            <p>Você se considera uma pessoa saudável no seu dia a dia?</p>
+            <label><input type="radio" name="saude" value="s" required> Sim</label>
+            <label><input type="radio" name="saude" value="n"> Não</label>
+
+            <br>
+            <button type="submit">Descubra</button>
+        </form>
+
+        <h3>Resultado:</h3>
+        <p id="resposta"></p>
+    </main>
+
+    <script>
+        const form = document.getElementById("formDiagnostico");
+        const resposta = document.getElementById("resposta");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const data = Object.fromEntries(new FormData(form).entries());
+
+            const response = await fetch("/api/diagnostico", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            resposta.textContent = result.resposta;
+        });
+    </script>
+</body>
+</html>
